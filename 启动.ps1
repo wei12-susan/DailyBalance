@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 $AppDirectory = [System.IO.Path]::GetFullPath($AppDirectory)
 $nodeScript = Join-Path $AppDirectory 'app.js'
 $dataFile = Join-Path $AppDirectory 'data.json'
-$url = 'http://127.0.0.1:38471/'
+$url = 'http://127.0.0.1:38472/'
 
 function Open-JournalPage {
   $edgeCandidates = @(
@@ -32,7 +32,7 @@ try {
   }
 } catch {}
 
-$env:JOURNAL_PORT = '38471'
+$env:JOURNAL_PORT = '38472'
 $env:JOURNAL_DATA_FILE = $dataFile
 $process = Start-Process -FilePath $NodeExecutable -ArgumentList @($nodeScript) -WorkingDirectory $AppDirectory -WindowStyle Hidden -PassThru
 
