@@ -2,7 +2,6 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
-const { spawn } = require('node:child_process');
 
 const port = Number(process.env.JOURNAL_PORT || 38472);
 const host = '127.0.0.1';
@@ -78,18 +77,11 @@ const server = http.createServer((req, res) => {
 });
 
 server.on('error', err => {
-  if (err.code === 'EADDRINUSE') {
-    spawn('cmd.exe', ['/c', 'start', '', `http://${host}:${port}`], { windowsHide: true, stdio: 'ignore' });
-    setTimeout(() => process.exit(0), 500);
-  } else {
-    console.error(err);
-    process.exit(1);
-  }
+  console.error(err);
+  process.exit(1);
 });
 
-server.listen(port, host, () => {
-  spawn('cmd.exe', ['/c', 'start', '', `http://${host}:${port}`], { windowsHide: true, stdio: 'ignore' });
-});
+server.listen(port, host);
 
 process.on('SIGINT', () => server.close(() => process.exit(0)));
 process.on('SIGTERM', () => server.close(() => process.exit(0)));
