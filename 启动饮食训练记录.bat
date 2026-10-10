@@ -9,15 +9,16 @@ if not defined NODE_EXE if exist "%ProgramFiles%\nodejs\node.exe" set "NODE_EXE=
 if not defined NODE_EXE if exist "%LocalAppData%\Programs\nodejs\node.exe" set "NODE_EXE=%LocalAppData%\Programs\nodejs\node.exe"
 
 if not defined NODE_EXE (
-  echo 未找到 Node.js。当前本地网页服务需要 Node.js。
-  echo 请把此提示发给我，我会提供不依赖 Node.js 的版本。
+  echo Node.js was not found. Install Node.js and try again.
   pause
   exit /b 1
 )
 
-powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%APP_DIR%启动.ps1" -AppDirectory "%APP_DIR%" -NodeExecutable "%NODE_EXE%"
+set "JOURNAL_APP_DIR=%APP_DIR%"
+set "JOURNAL_NODE_EXE=%NODE_EXE%"
+powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -Command "$scriptPath = Join-Path $env:JOURNAL_APP_DIR ([string][char]0x542F + [char]0x52A8 + '.ps1'); & $scriptPath -AppDirectory $env:JOURNAL_APP_DIR -NodeExecutable $env:JOURNAL_NODE_EXE"
 if errorlevel 1 (
-  echo 网页启动失败，请把上方错误提示发给我。
+  echo The local website could not be opened. Review the error above.
   pause
 )
 endlocal
